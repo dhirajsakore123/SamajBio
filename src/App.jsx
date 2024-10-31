@@ -4,6 +4,7 @@ import GoogleSheetFetch from './components/GoogleSheetFetch'
 import HomeCompo from './components/HomeCompo'
 import AddressAndContacts from './components/AddressAndContacts'
 import Notice from './components/Notice'
+import toast, { Toaster } from 'react-hot-toast';
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
       <AddressAndContacts/>
       <GoogleSheetPushData/>
       <Notice/>
+      <Toaster />
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-
+import toast from 'react-hot-toast';
 export default function GoogleSheetPushData() {
   // Load Razorpay script dynamically
   useEffect(() => {
@@ -32,6 +32,7 @@ export default function GoogleSheetPushData() {
         // On successful payment, submit the form data to Google Sheets
         sendDataToGoogleSheet(formDatab);
         formEle.reset(); // Clear the form after successful submission
+        toast.success('BioData submitted Successfully')
       },
       prefill: {
         name: formDatab.get("FullName"),
@@ -79,7 +80,7 @@ export default function GoogleSheetPushData() {
           BioData Form
         </h1>
         <p className="text-center text-gray-600 mb-8">
-          This demonstrates how to send data from a website form to Google Sheets in React or Vanilla JS
+         Enter Your BioData Info
         </p>
         <form className="bg-white text-black grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" onSubmit={Submit}>
           {/* Form fields go here */}
@@ -109,6 +110,7 @@ export default function GoogleSheetPushData() {
           </div>
         </form>
       </div>
+      
     </div>
   );
 }
