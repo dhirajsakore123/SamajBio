@@ -31,6 +31,7 @@ export default function GoogleSheetPushData() {
       handler: function (response) {
         // On successful payment, submit the form data to Google Sheets
         sendDataToGoogleSheet(formDatab);
+        formEle.reset(); // Clear the form after successful submission
       },
       prefill: {
         name: formDatab.get("FullName"),
@@ -56,7 +57,7 @@ export default function GoogleSheetPushData() {
   // Function to send form data to Google Sheets
   const sendDataToGoogleSheet = (formDatab) => {
     fetch(
-      "https://script.google.com/macros/s/AKfycbw4t83gcbKcwFbYRvnq3ps-OH-QwvwstmBC7OvVT9rFDtafk15yedxL8KS_mmNTSas8sw/exec",
+      "https://script.google.com/macros/s/AKfycbyS2zE4QHuywgFK4AnwC4zZe_xnpPuoRUPUA1xTIXNziyuTg0q0HNA2F0-tMLkn6hFASw/exec",
       {
         method: "POST",
         body: formDatab,
