@@ -1,6 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import toast from 'react-hot-toast';
+
 export default function GoogleSheetPushData() {
+  const [donationAmount, setDonationAmount] = useState(100); // Default donation amount
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
+
   // Load Razorpay script dynamically
   useEffect(() => {
     const script = document.createElement("script");
@@ -13,52 +17,56 @@ export default function GoogleSheetPushData() {
     };
   }, []);
 
-  // Handle form submission and Razorpay payment
-  const Submit = (e) => {
-    e.preventDefault(); // Prevent the default form submission
+  // Handle form submission to open the donation amount modal
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsModalOpen(true); // Open the modal
+  };
+
+  // Function to handle Razorpay payment after donation amount is selected
+  const handlePayment = () => {
     const formEle = document.querySelector("form");
-    console.log(formEle);
-    
     const formDatab = new FormData(formEle);
 
-    // Razorpay payment options
+    formDatab.append("Donation", donationAmount);
+
     const options = {
       key: "rzp_test_8gAAcZx74kP2Zm", // Your Razorpay key
-      amount: 5000, // Amount in smallest currency unit (e.g., 50000 paise = 500 INR)
+      amount: donationAmount * 100, // Convert to smallest currency unit (paise)
       currency: "INR",
-      name: "Kunbhi Samaj ",
-      description: "Payment for form submission",
+      name: "Doanation For Kunbhi Samaj",
+      description: "Donation for form submission",
       handler: function (response) {
-        // On successful payment, submit the form data to Google Sheets
-        sendDataToGoogleSheet(formDatab);
+        sendDataToGoogleSheet(formDatab); // Send data to Google Sheets after successful payment
         formEle.reset(); // Clear the form after successful submission
-        toast.success('BioData submitted Successfully')
+        setIsModalOpen(false); // Close the modal
+        toast.success("BioData submitted successfully");
       },
       prefill: {
         name: formDatab.get("FullName"),
-        email: "dhirajsakore@gmail.com", // Optional
+        email: "example@example.com",
       },
       notes: {
-        address: "note value",
+        address: "Donor Address",
       },
       theme: {
         color: "#F37254",
       },
     };
 
-    // Ensure Razorpay is available before opening
     if (window.Razorpay) {
       const razorpay = new window.Razorpay(options);
       razorpay.open();
     } else {
       console.error("Razorpay SDK not loaded.");
+      toast.error("Payment processing failed. Please try again.");
     }
   };
 
   // Function to send form data to Google Sheets
   const sendDataToGoogleSheet = (formDatab) => {
     fetch(
-      "https://script.google.com/macros/s/AKfycbyS2zE4QHuywgFK4AnwC4zZe_xnpPuoRUPUA1xTIXNziyuTg0q0HNA2F0-tMLkn6hFASw/exec",
+      "https://script.google.com/macros/s/AKfycbzcaa4n3WiouJ7NC30tUv8EkkKu2ML0j907Ici80JRwGwnZZ9ueNGcnRoVQDWl9xZZpZQ/exec",
       {
         method: "POST",
         body: formDatab,
@@ -66,7 +74,7 @@ export default function GoogleSheetPushData() {
     )
       .then((res) => res.json())
       .then((data) => {
-        console.log("Form Submitted", data);
+        console.log("Form submitted", data);
       })
       .catch((error) => {
         console.error("Error submitting form", error);
@@ -74,16 +82,13 @@ export default function GoogleSheetPushData() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-2 md:px-4">
+    <div className="flex items-center justify-center min-h-fit bg-gray-100">
       <div className="w-full bg-white p-8 rounded-lg shadow-md">
         <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">
           BioData Form
         </h1>
-        <p className="text-center text-gray-600 mb-8">
-         Enter Your BioData Info
-        </p>
-        <form className="bg-white text-black grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" onSubmit={Submit}>
-          {/* Form fields go here */}
+        <p className="text-center text-gray-600 mb-8">Enter Your BioData Info</p>
+        <form className="bg-white text-black grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" onSubmit={handleSubmit}>
           <input className="w-full p-4 border bg-white text-black border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Full Name" name="FullName" type="text" required />
           <input className="w-full p-4 border bg-white text-black border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Date of Birth" name="DateOfBirth" type="date" required />
           <input className="w-full p-4 border bg-white text-black border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Place of Birth" name="PlaceOfBirth" type="text" required />
@@ -95,7 +100,7 @@ export default function GoogleSheetPushData() {
           <input className="w-full p-4 border bg-white text-black border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Father's Name" name="FatherName" type="text" required />
           <input className="w-full p-4 border bg-white text-black border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Mother's Name" name="MotherName" type="text" required />
           <input className="w-full p-4 border bg-white text-black border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Contact No" name="ContactNo" type="text" required pattern="[0-9]{10,15}" />
-          <input className="w-full p-4 border bg-white text-black border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Aadhaar Number" name="AadhaarNumber" type="text" required pattern="[0-9]{12}"   />
+          <input className="w-full p-4 border bg-white text-black border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Aadhaar Number" name="AadhaarNumber" type="text" required pattern="[0-9]{12}" />
           <input className="w-full p-4 border bg-white text-black border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Aadhaar Linked Mobile" name="AadhaarLinkedMobile" type="text" required pattern="[0-9]{10}" />
           <div className="col-span-1 sm:col-span-2 md:col-span-3 grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-4">
             <textarea className="w-full p-4 border bg-white text-black border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Brother and Sister" name="BrotherAndSister"></textarea>
@@ -105,15 +110,49 @@ export default function GoogleSheetPushData() {
 
           <div className="flex justify-end col-span-1 sm:col-span-2 md:col-span-3">
             <button className="w-fit h-fit py-2 px-4 bg-blue-500 text-white font-semibold rounded-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500" type="submit">
-             Pay & Submit
+              Pay & Submit
             </button>
           </div>
         </form>
       </div>
-      
+
+      {/* Modal for donation amount selection */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-8 rounded-md w-80">
+            <h2 className="text-xl font-semibold text-center mb-4">Select Donation Amount</h2>
+            <div className="space-y-2">
+              {[100, 200, 300, 400, 500].map((amount) => (
+                <button
+                  key={amount}
+                  className={`w-full py-2 px-4 rounded-sm ${
+                    donationAmount === amount ? "bg-blue-500 text-white" : "bg-gray-200"
+                  }`}
+                  onClick={() => setDonationAmount(amount)}
+                >
+                  ₹{amount}
+                </button>
+              ))}
+            </div>
+            <button
+              className="mt-6 w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-sm hover:bg-blue-600"
+              onClick={handlePayment}
+            >
+              Proceed to Pay ₹{donationAmount}
+            </button>
+            <button
+              className="mt-4 w-full py-2 px-4 bg-gray-400 text-white font-semibold rounded-sm hover:bg-gray-500"
+              onClick={() => setIsModalOpen(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
 
 
 
