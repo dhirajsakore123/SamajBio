@@ -26,9 +26,9 @@ const HomeCompo = () => {
   return (
     <div className=" relative lg:h-screen   bg-gradient-to-tr from-orange-300 to-yellow-100">
       <nav className=" w-full h-16 shadow-md bg-white px-5 md:px-10  "></nav>
-      <div className="h-[150vh] lg:h-[90.85vh] grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1 ">
+      <div className=" h-fit  lg:h-[90.85vh] grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1 ">
         
-        <div className=" text-black px-5 flex flex-col justify-center items-center  ">
+        <div className=" text-black px-5 flex flex-col justify-center items-center gap-5 py-5 ">
           <div className="  w-full flex justify-between md:justify-around">
             <img src={logo} alt="not found" className=" w-32 h-32 " />
             <img src={logo2} alt="not found" className=" h-32 " />

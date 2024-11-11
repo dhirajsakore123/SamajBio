@@ -6,7 +6,7 @@ const AddressAndContacts = () => {
       <div className="bg-slate-50 grid grid-cols-1 md:grid-cols-1">
         <div className="  min-h-[50vh] px-2 md:px-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3   text-black   items-center justify-evenly  gap-5 py-5 ">
           <div className="   h-28 border flex flex-col items-center justify-center rounded-sm bg-white shadow  ">
-            <p className=" text-xl tiro-devanagari-marathi-regular">संस्थापक</p>
+            <p className=" text-xl tiro-devanagari-marathi-regular">संकेतस्थळ संस्थापक</p>
             <p className=" text-3xl tiro-devanagari-marathi-regular">
               श्री उज्ज्वल बाडबैल
             </p>
