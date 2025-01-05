@@ -7,6 +7,8 @@ import Notice from "./components/Notice";
 import toast, { Toaster } from "react-hot-toast";
 import Bios from "./components/Bios";
 import logo from "/logo.png";
+import ImageCarousel from "./components/Caursole";
+
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -19,6 +21,7 @@ const App = () => {
   return (
     <div >
       <HomeCompo />
+      <ImageCarousel/>
       <Bios />
       <AddressAndContacts />
       <GoogleSheetPushData />
